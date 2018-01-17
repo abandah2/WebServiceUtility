@@ -19,6 +19,7 @@ public class WSAsync extends AsyncTask<String, Void, Object>
     private int wsId;
     private String wsUrl, message;
     private boolean StartListener;
+    public Class<?> cls;
 
     public WSAsync(Context context, WSResponseListener responseListener, JSONObject jsonObject,
                    String wsUrl, int wsId, String message, boolean showLoader)
@@ -31,6 +32,22 @@ public class WSAsync extends AsyncTask<String, Void, Object>
         this.message = message;
         this.showLoader = showLoader;
         this.StartListener = true;
+        this.cls=WSResponse.class;
+
+    }
+    public WSAsync(Context context, WSResponseListener responseListener, JSONObject jsonObject,
+                   String wsUrl, int wsId, String message, boolean showLoader,Class<?>cls)
+    {
+        this.context = context;
+        this.responseListener = responseListener;
+        this.jsonObject = jsonObject;
+        this.wsUrl = wsUrl;
+        this.wsId = wsId;
+        this.message = message;
+        this.showLoader = showLoader;
+        this.StartListener = true;
+        this.cls=cls;
+
     }
 
     public WSAsync(Context context, JSONObject jsonObject,
@@ -58,7 +75,7 @@ public class WSAsync extends AsyncTask<String, Void, Object>
     protected Object doInBackground(String... params) {
         try
         {
-            return new WSRequest().getPostRequest(wsUrl, jsonObject, WSResponse.class);
+            return new WSRequest().getPostRequest(wsUrl, jsonObject, cls);
         }
         catch (Exception e)
         {
