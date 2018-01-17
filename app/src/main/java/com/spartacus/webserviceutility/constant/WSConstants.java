@@ -10,4 +10,5 @@ public class WSConstants {
 
     public static final String PARAM_USERNAME = "UserName";
     public static final String PARAM_PASSWORD = "PassWord";
+    public static final int CALLID = 0;
 }
