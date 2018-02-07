@@ -13,11 +13,12 @@ import com.spartacus.webserviceutility.webservice.WSResponse;
 import com.spartacus.webserviceutility.webservice.WSResponseListener;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements WSResponseListener {
+public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG ="MainActivity" ;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,68 +27,45 @@ public class MainActivity extends AppCompatActivity implements WSResponseListene
     }
 
 
-
     /////////////////////////////  API CALL /////////////////////////////////////////////
     private void CallAPIRegisterDevice() {
+
+        JSONObject jsonObject = new JSONObject();
         try {
-            JSONObject jsonObject = new JSONObject();
             jsonObject.put(WSConstants.PARAM_USERNAME, "user");
             jsonObject.put(WSConstants.PARAM_PASSWORD, "pass");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            //send array
+        //send array
            /* JSONArray jsonArray = new JSONArray();
             for (String string :iist) {
                 jsonArray.put(string);
             }
             jsonObject.put(WSConstants.array, jsonArray);*/
 
-           //send pic
-           // jsonObject.put(WSConstants.PARAM_Pic, Base64.encodeToString(image, 0));
+        //send pic
+        // jsonObject.put(WSConstants.PARAM_Pic, Base64.encodeToString(image, 0));
 
-            if (Utility.isNetworkAvailable(this.getApplicationContext(), false)) {
-                new WSAsync(this, this, jsonObject, WSConstants.API_URL, WSConstants.CALLID, "CONNECTING_TO_SERVER", false).execute();
-            } else {
-               // ShowErrorMessage(getResources().getString(R.string.Network_error));
+        new WSAsync(this, jsonObject, WSConstants.API_URL, new WSResponseListener() {
+
+            @Override
+            public void onResponse(WSResponse response) {
+
             }
-        } catch (Exception e) {
-            Log.e(TAG, "CallAPIRegisterDevice Exception : " + e.toString());
-        }
-    }
 
-    @Override
-    public void onWSResponse(int wsId, Object data, Exception error) {
+            @Override
+            public void onError(Exception error) {
 
-        switch (wsId) {
-            case WSConstants.CALLID:
-                OnResponseRegisterDevice(data, error);
-                break;
-        }
-    }
-
-    private void OnResponseRegisterDevice(Object data, Exception error) {
-        try {
-            Utility.hideProgressDialog();
-            if (data != null) {
-                WSResponse response = (WSResponse) data;
-                if (response.getStatus().equalsIgnoreCase("1")) {
-                } else {
-                    //RestartScanning(response.getMessage());
-                    //  ShowErrorMessage(response.getMessage());
-                    Log.e(TAG, " failed, message : " + response.getMessage());
-                }
-            } else if (error != null) {
-                //  ShowErrorMessage(error.toString());
-                Log.e(TAG, " api Exception : " + error.toString());
-            } else {
-                //  ShowErrorMessage(getResources().getString(R.string.Not_Valid_QRCode));
             }
-        } catch (Exception e) {
-            // ShowErrorMessage(e.toString());
-            Log.e(TAG, " Exception : " + e.toString());
-            e.printStackTrace();
-        }
+        }).execute();
     }
-
-
-
 }
+
+
+
+
+
+
+
