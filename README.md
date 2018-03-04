@@ -1,6 +1,6 @@
 # WebServiceUtility
 
-Its an easy utility to handle http post requist (Request -> Response). 
+Its an easy utility to handle http post Request (Request -> Response). 
 
 
 ## How to integrate into your app?
